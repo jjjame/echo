@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{Arg, ArgAction, Command};
 fn main() {
     let matches = Command::new("Echo")
         .version("0.1")
@@ -8,6 +8,7 @@ fn main() {
             Arg::new("text")
                 .value_name("TEXT")
                 .help("The text to echo")
+                .action(ArgAction::Append)
                 .required(true),
         )
         .arg(
@@ -18,8 +19,13 @@ fn main() {
         )
         .get_matches();
 
-    let text: &String = matches.get_one("text").unwrap();
-    let omit_newline: bool = matches.get_flag("omit_newline");
+    let text: Vec<&str> = matches
+        .get_many::<String>("text")
+        .unwrap()
+        .map(|s| s.as_str())
+        .collect();
 
-    println!("text {}, omit_newline {}", text, omit_newline);
+    let omit_newline: bool = matches.get_flag("omit_newline");
+    let ending = if omit_newline { "" } else { "\n" };
+    println!("{}{}", text.join(" "), ending);
 }
