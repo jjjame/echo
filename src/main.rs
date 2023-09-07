@@ -1,6 +1,6 @@
 use clap::{Arg, ArgAction, Command};
 fn main() {
-    let matches = Command::new("echo")
+    let matches = Command::new("echor")
         .version("0.1")
         .author("jjjame")
         .about("rust echo")
